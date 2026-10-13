@@ -1,6 +1,5 @@
-// REPLACE ONLY THIS LINK with your YouTube share URL (youtube.com/watch?v=... or youtu.be/...).
-// Until then, the existing VFX Vimeo reel is used as a placeholder.
-const AI_REEL_URL = "https://vimeo.com/1133149897";
+// AI reel: update this URL if the YouTube video changes.
+const AI_REEL_URL = "https://youtu.be/9BCYDufrtZE";
 
 function embedVideoUrl(link) {
   try {
@@ -25,14 +24,29 @@ const aiPlayer = document.getElementById("ai-reel-player");
 if (aiPlayer) aiPlayer.src = embedVideoUrl(AI_REEL_URL);
 
 document.getElementById('year').textContent=new Date().getFullYear();
-const shots = ["Kaspar · Close-up", "Kaspar · Medium close-up", "Kaspar · Alternate close-up", "Feuerbach · Close-up", "Wide shot", "Stool · Wide shot", "Top shot"];
-const container=document.getElementById('comparisons');
-shots.forEach((title,index)=>{
- const n=String(index+1).padStart(2,'0');
- const heading=document.createElement('h4');heading.className='shot-title';heading.textContent=title;container.append(heading);
- const group=document.createElement('div');group.className='compare';
- for(const [folder,label] of [['3d','3D Render · Blender'],['ai','AI Image · Nano Banana + Photoshop']]){
-  const fig=document.createElement('figure');fig.className='media';const img=new Image();img.loading='lazy';img.alt=`${title} — ${label}`;img.src=`assets/img/${folder}/shot-${n}.jpg`;
-  const caption=document.createElement('figcaption');caption.textContent=label;fig.append(img,caption);group.append(fig);
- }container.append(group);
+// Display order: Top shot, Kaspar alternate close-up, wide shot, Kaspar close-up,
+// Feuerbach close-up, stool wide shot. Kaspar medium close-up is omitted.
+const shots = [
+  { id: '07', name: 'Top shot' },
+  { id: '03', name: 'Kaspar alternate close-up' },
+  { id: '05', name: 'Wide shot' },
+  { id: '01', name: 'Kaspar close-up' },
+  { id: '04', name: 'Feuerbach close-up' },
+  { id: '06', name: 'Stool wide shot' }
+];
+const container = document.getElementById('comparisons');
+if (container) shots.forEach(({id, name}) => {
+  const group = document.createElement('div');
+  group.className = 'compare';
+  for (const [folder, label] of [['3d', '3D Render'], ['ai', 'AI Image']]) {
+    const fig = document.createElement('figure');
+    fig.className = 'media';
+    const img = new Image();
+    img.loading = 'lazy';
+    img.alt = `${name}: ${label}`;
+    img.src = `assets/img/${folder}/shot-${id}.jpg`;
+    fig.append(img);
+    group.append(fig);
+  }
+  container.append(group);
 });
